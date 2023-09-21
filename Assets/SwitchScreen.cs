@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum screenSelector
+{
+    login,
+    student,
+    teacher
+}
+
 public class SwitchScreen : MonoBehaviour
 {
     public GameObject loginScreen;
@@ -13,6 +20,7 @@ public class SwitchScreen : MonoBehaviour
     private bool alert;
     private float time = 0;
 
+    
 
     public void Start()
     {
@@ -27,22 +35,24 @@ public class SwitchScreen : MonoBehaviour
     {
         callingSession.SetActive(true);
         overlappingElement.SetActive(true);
-        changeScreen("teacher");
+        changeScreen(screenSelector.teacher);
     }
 
-    public void changeScreen(string screen)
+    public void changeScreen(screenSelector screen)
     {
         current.SetActive(false);
 
-        if (screen == "login")
+        switch (screen)
         {
-            current = loginScreen;
-        } else if (screen == "student")
-        {
-            current = studentScreen;
-        } else if (screen == "teacher")
-        {
-            current = teacherScreen;
+            case screenSelector.login:
+                current = loginScreen;
+                break;
+            case screenSelector.student:
+                current = studentScreen;
+                break;
+            case screenSelector.teacher:
+                current = teacherScreen;
+                break;
         }
 
         current.SetActive(true);
@@ -52,14 +62,14 @@ public class SwitchScreen : MonoBehaviour
     {
         callingSession.SetActive(true);
         overlappingElement.SetActive(true);
-        changeScreen("student");
+        changeScreen(screenSelector.student);
     }
 
     public void endCall()
     {
         callingSession.SetActive(false);
         overlappingElement.SetActive(false);
-        changeScreen("login");
+        changeScreen(screenSelector.login);
     }
 
     public void Alert()
