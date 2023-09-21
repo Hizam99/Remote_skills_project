@@ -10,6 +10,8 @@ public class SwitchScreen : MonoBehaviour
     public GameObject callingSession;
     public GameObject overlappingElement;
     private GameObject current;
+    private bool alert;
+    private float time = 0;
 
 
     public void Start()
@@ -62,12 +64,31 @@ public class SwitchScreen : MonoBehaviour
 
     public void Alert()
     {
-        overlappingElement.transform.GetChild(2).gameObject.SetActive(true);
+        alert = true;
     }
 
     public void test()
     {
         print("working");
+    }
+
+    private void Update()
+    {
+        if (alert)
+        {
+            overlappingElement.transform.GetChild(2).gameObject.SetActive(true);
+        }
+
+        if (time < 1 && alert)
+        {
+            time = time + Time.deltaTime;
+        } else if (time > 1 && alert)
+        {
+            alert = false;
+            time = 0;
+            overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
+            time = 0;
+        }
     }
 
 }
