@@ -14,6 +14,9 @@ public class SwitchScreen : MonoBehaviour
 
     public void Start()
     {
+        callingSession.SetActive(false);
+        teacherScreen.SetActive(false);
+        studentScreen.SetActive(false);
         current = loginScreen;
         current.SetActive(true);
     }
@@ -21,33 +24,40 @@ public class SwitchScreen : MonoBehaviour
     public void teacherMode()
     {
         callingSession.SetActive(true);
-        current.SetActive(false);
-        current = teacherScreen;
         overlappingElement.SetActive(true);
-        changeScreen();
+        changeScreen("teacher");
     }
 
-    public void changeScreen()
+    public void changeScreen(string screen)
     {
+        current.SetActive(false);
+
+        if (screen == "login")
+        {
+            current = loginScreen;
+        } else if (screen == "student")
+        {
+            current = studentScreen;
+        } else if (screen == "teacher")
+        {
+            current = teacherScreen;
+        }
+
         current.SetActive(true);
     }
 
     public void studentMode()
     {
         callingSession.SetActive(true);
-        current.SetActive(false);
-        current = studentScreen;
         overlappingElement.SetActive(true);
-        changeScreen();
+        changeScreen("student");
     }
 
     public void endCall()
     {
         callingSession.SetActive(false);
         overlappingElement.SetActive(false);
-        current.SetActive(false);
-        current = loginScreen;
-        changeScreen();
+        changeScreen("login");
     }
 
     public void Alert()
