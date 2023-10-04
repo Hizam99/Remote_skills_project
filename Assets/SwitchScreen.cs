@@ -8,7 +8,7 @@ public enum screenSelector
     student,
     teacher
 }
-
+//Please work
 public class SwitchScreen : MonoBehaviour
 {
     public GameObject loginScreen;
