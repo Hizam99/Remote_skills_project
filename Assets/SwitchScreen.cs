@@ -19,6 +19,7 @@ public class SwitchScreen : MonoBehaviour
     private GameObject current;
     private bool alert;
     private float time = 0;
+    private bool recip = false;
 
     
 
@@ -99,6 +100,19 @@ public class SwitchScreen : MonoBehaviour
             overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
             time = 0;
         }
+    }
+
+    public void recipe()
+    {
+        if (recip == false)
+        {
+            recip = true;
+        } else
+        {
+            recip = false;
+        }
+
+        overlappingElement.transform.GetChild(5).gameObject.SetActive(recip);
     }
 
 }
