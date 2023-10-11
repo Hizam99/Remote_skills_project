@@ -18,6 +18,7 @@ public class SwitchScreen : MonoBehaviour
     public GameObject overlappingElement;
     private GameObject current;
     private bool alert;
+    private bool thumb_up;
     private float time = 0;
     private bool recip = false;
 
@@ -100,6 +101,23 @@ public class SwitchScreen : MonoBehaviour
             overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
             time = 0;
         }
+
+        if (thumb_up)
+        {
+            overlappingElement.transform.GetChild(3).gameObject.SetActive(true);
+        }
+
+        if (time < 1 && thumb_up)
+        {
+            time = time + Time.deltaTime;
+        }
+        else if (time > 1 && thumb_up)
+        {
+            thumb_up = false;
+            time = 0;
+            overlappingElement.transform.GetChild(3).gameObject.SetActive(false);
+            time = 0;
+        }
     }
 
     public void recipe()
@@ -115,4 +133,8 @@ public class SwitchScreen : MonoBehaviour
         overlappingElement.transform.GetChild(5).gameObject.SetActive(recip);
     }
 
+    public void thumb()
+    {
+        thumb_up = true;
+    }
 }
