@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Device;
 
 public enum screenSelector
 {
@@ -16,11 +18,14 @@ public class SwitchScreen : MonoBehaviour
     public GameObject studentScreen;
     public GameObject callingSession;
     public GameObject overlappingElement;
+    public GameObject help_page;
     private GameObject current;
+
     private bool alert;
     private bool thumb_up;
     private float time = 0;
     private bool recip = false;
+    private int helpPageNum = 0;
 
     
 
@@ -130,11 +135,47 @@ public class SwitchScreen : MonoBehaviour
             recip = false;
         }
 
-        overlappingElement.transform.GetChild(5).gameObject.SetActive(recip);
+        overlappingElement.transform.GetChild(4).gameObject.SetActive(recip);
     }
 
     public void thumb()
     {
         thumb_up = true;
+    }
+
+    public void instructionPage(string action)
+    {
+        switch (action)
+        {
+            case "open":
+                help_page.transform.GetChild(1).gameObject.SetActive(true);
+                break;
+            case "close":
+                help_page.transform.GetChild(1).gameObject.SetActive(false);
+                break;
+            case "flip left":
+                help_page.transform.GetChild(1).GetChild(helpPageNum).gameObject.SetActive(false);
+                if (helpPageNum == 0)
+                {
+                    helpPageNum = 2;
+                } else
+                {
+                    helpPageNum -= 1;
+                }
+                help_page.transform.GetChild(1).GetChild(helpPageNum).gameObject.SetActive(true);
+                break;
+            case "flip right":
+                help_page.transform.GetChild(1).GetChild(helpPageNum).gameObject.SetActive(false);
+                if (helpPageNum == 2)
+                {
+                    helpPageNum = 0;
+                }
+                else
+                {
+                    helpPageNum += 1;
+                }
+                help_page.transform.GetChild(1).GetChild(helpPageNum).gameObject.SetActive(true);
+                break;
+        }
     }
 }
