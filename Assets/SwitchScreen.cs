@@ -28,11 +28,11 @@ public class SwitchScreen : MonoBehaviour
     public TextMeshProUGUI IPDisplay;
     public GameObject help_page;
     private GameObject current;
-    
+
     private bool recip = false;
     private int helpPageNum = 0;
 
-
+    
 
     public void Start()
     {
@@ -138,7 +138,8 @@ public class SwitchScreen : MonoBehaviour
                 if (helpPageNum == 2)
                 {
                     helpPageNum = 0;
-                } else
+                }
+                else
                 {
                     helpPageNum += 1;
                 }
@@ -146,5 +147,4 @@ public class SwitchScreen : MonoBehaviour
                 break;
         }
     }
-
 }
