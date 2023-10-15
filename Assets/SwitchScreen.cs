@@ -135,7 +135,7 @@ public class SwitchScreen : MonoBehaviour
             recip = false;
         }
 
-        overlappingElement.transform.GetChild(4).gameObject.SetActive(recip);
+        overlappingElement.transform.GetChild(5).gameObject.SetActive(recip);
     }
 
     public void thumb()
