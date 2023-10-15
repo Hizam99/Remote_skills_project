@@ -14,19 +14,101 @@ public class RunServer : MonoBehaviour
 {
     public TextMeshProUGUI IPDisplay;
     public Button hangUpButton;
+    public Button thumbsUpButton;
+    public Button alertButton;
     public Server server;
 
     public bool serverMode = false;
+    public SwitchScreen screen;
+
+    public GameObject thumbsUpPopup;
+    public GameObject overlappingElement;
+
+    private float time = 0;
+
+    public bool clientJoined = false;
+    public bool thumbsUp = false;
+    public bool alert = false;
 
     private void Update()
     {
+        //Make sure it's in server mode before connecting functionality to buttons
         if (serverMode)
         {
             Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
-            //TODO add buttons for sending messages too 
+            Button tuBtn = thumbsUpButton.GetComponent<Button>();
+            tuBtn.onClick.AddListener(ServerSendsThumbs);
+            Button aBtn = alertButton.GetComponent<Button>();
+            aBtn.onClick.AddListener(ServerSendsAlert);
+
+            //Display the IP address if the server is waiting and client hasn't joined
+            if (server.getGameState() == "waiting" && !clientJoined)
+            {
+                Debug.Log("displaying IP, waiting");
+                IPDisplay.enabled = true;
+                displayIP();
+            } else
+            {
+                IPDisplay.enabled = false;
+            }
+            if (server.getGameState() != "waiting")
+            {
+                Debug.Log("hiding IP, client joined");
+                clientJoined = true;
+            }
+
+            //Call thumps up
+            if (server.getGameState() == "thumbs")
+            {
+                ThumbsUpPopup();
+                server.changeGameState();
+            } else if (server.getGameState() == "disconnected")
+            {
+                screen.changeScreen(screenSelector.login);
+                screen.endCall();
+                server.changeGameState();
+            } else if (server.getGameState() == "alert")
+            {
+                AlertPopup();
+                server.changeGameState();
+            }
+
         }
-        
+
+        if (thumbsUp)
+        {
+            thumbsUpPopup.SetActive(true);
+        }
+        if (time < 1 && thumbsUp)
+        {
+            time = time + Time.deltaTime;
+        }
+        else if (time > 1 && thumbsUp)
+        {
+            thumbsUp = false;
+            time = 0;
+            thumbsUpPopup.SetActive(false);
+            time = 0;
+        }
+
+        if (alert)
+        {
+            overlappingElement.transform.GetChild(2).gameObject.SetActive(true);
+        }
+
+        if (time < 1 && alert)
+        {
+            time = time + Time.deltaTime;
+        }
+        else if (time > 1 && alert)
+        {
+            alert = false;
+            time = 0;
+            overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
+            time = 0;
+        }
+
     }
 
     //Getting local IP address for display
@@ -58,9 +140,22 @@ public class RunServer : MonoBehaviour
         server = new Server();
     }
 
+    public void ThumbsUpPopup()
+    {
+        Debug.Log("thumbs up");
+        thumbsUp = true;
+    }
+
+    public void AlertPopup()
+    {
+        alert = true;
+    }
+
     public void HangUpButtonClicked()
     {
         server.CloseConnection();
+        serverMode = false;
+        clientJoined = false;
     }
 
     public void ServerSendsAlert()
@@ -81,6 +176,7 @@ public class Server
     private Thread listenThread;
     private NetworkStream stream;
     private TcpClient client;
+    private string gameState = "waiting";
 
     public Server()
     {
@@ -97,11 +193,12 @@ public class Server
     {
         while (true)
         {
-
             client = server.AcceptTcpClient();
             //Change the screen here now
             Debug.Log("Reached client");
+            gameState = "";
             stream = client.GetStream();
+            //TODO DONT I HAVE TO MOVE THIS????
             byte[] buffer = new byte[1024];
             int bytesRead;
             //Read bytes from the incoming stream
@@ -109,17 +206,24 @@ public class Server
             {
                 string dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
                 Debug.Log("Received " + dataReceived);
-                if (dataReceived == "hand")
-                {
-                    //TODO hand up
-                } else if (dataReceived == "thumbs")
-                {
-                    //TODO
-                }
+                gameState = dataReceived;
             }
             break;
         }
-        
+        Debug.Log("client disconnected");
+        //Shut down server, send it back to login page
+        CloseConnection();
+        gameState = "disconnected";
+    }
+
+    public string getGameState()
+    {
+        return gameState;
+    }
+
+    public void changeGameState()
+    {
+        gameState = "";
     }
 
     //Send message to the student/client
@@ -137,7 +241,14 @@ public class Server
         {
             client.Close();
         }
-        server?.Stop();
+        if (stream != null)
+        {
+            stream.Close();
+        }
+        if (server != null)
+        {
+            server?.Stop();
+        }
         Debug.Log("Server stopped");
     }
 } 
