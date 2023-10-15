@@ -25,6 +25,7 @@ public class SwitchScreen : MonoBehaviour
     public GameObject overlappingElement;
     public GameObject buttonCover;
     public GameObject IPTextBox;
+    public GameObject displayCamera;
     public TextMeshProUGUI IPDisplay;
     public GameObject help_page;
     private GameObject current;
@@ -42,6 +43,11 @@ public class SwitchScreen : MonoBehaviour
         buttonCover.SetActive(false);
         current = loginScreen;
         current.SetActive(true);
+    }
+
+    public void showCameraScreen()
+    {
+        displayCamera.SetActive(true);
     }
 
     public void teacherMode()
@@ -97,6 +103,7 @@ public class SwitchScreen : MonoBehaviour
         callingSession.SetActive(false);
         overlappingElement.SetActive(false);
         changeScreen(screenSelector.login);
+        displayCamera.SetActive(false);
     }
 
     public void recipe()

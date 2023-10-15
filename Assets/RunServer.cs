@@ -20,6 +20,7 @@ public class RunServer : MonoBehaviour
 
     public bool serverMode = false;
     public SwitchScreen screen;
+    public CameraScript cameraScript;
 
     public GameObject thumbsUpPopup;
     public GameObject overlappingElement;
@@ -29,9 +30,13 @@ public class RunServer : MonoBehaviour
     public bool clientJoined = false;
     public bool thumbsUp = false;
     public bool alert = false;
+    public bool cameraBeingDisplayed = false;
 
+    //Create this to keep track of if something has just been sent
+    public bool justSent = false;
     private void Update()
     {
+        Debug.Log(justSent);
         //Make sure it's in server mode before connecting functionality to buttons
         if (serverMode)
         {
@@ -58,6 +63,12 @@ public class RunServer : MonoBehaviour
                 clientJoined = true;
             }
 
+            if (clientJoined && !cameraBeingDisplayed)
+            {
+                displayCamera();
+                cameraBeingDisplayed = true;
+            }
+
             //Call thumps up
             if (server.getGameState() == "thumbs")
             {
@@ -74,6 +85,15 @@ public class RunServer : MonoBehaviour
                 server.changeGameState();
             }
 
+        }
+
+        if (justSent && time < 0.1)
+        {
+            time = time + Time.deltaTime;
+        } else if (justSent && time > 0.1)
+        {
+            justSent = false;
+            time = 0;
         }
 
         if (thumbsUp)
@@ -109,6 +129,12 @@ public class RunServer : MonoBehaviour
             time = 0;
         }
 
+    }
+
+    public void displayCamera()
+    {
+        cameraScript.StartStopCam_Clicked();
+        screen.showCameraScreen();
     }
 
     //Getting local IP address for display
@@ -160,12 +186,21 @@ public class RunServer : MonoBehaviour
 
     public void ServerSendsAlert()
     {
-        server.SendMessage("alert");
+        if (!justSent)
+        {
+            server.SendMessage("alert");
+            Debug.Log("Function activated");
+        }
+        justSent = true;
     }
 
     public void ServerSendsThumbs()
     {
-        server.SendMessage("thumbs");
+        if (!justSent)
+        {
+            server.SendMessage("thumbs");
+        }
+        justSent= true;
     }
 
 }
