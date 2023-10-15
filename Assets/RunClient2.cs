@@ -30,7 +30,7 @@ public class RunClient2 : MonoBehaviour
     public GameObject overlappingElement;
 
     public SwitchScreen screen;
-
+    public CameraScript cameraScript;
 
 
     private void Update()
@@ -38,6 +38,7 @@ public class RunClient2 : MonoBehaviour
         //If the client has started
         if (clientMode)
         {
+
             //Hang up button
             Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
@@ -151,6 +152,8 @@ public class RunClient2 : MonoBehaviour
         //Create new client instance
         client = new Client(ip);
         Debug.Log("Client has started");
+        cameraScript.StartStopCam_Clicked();
+        screen.showCameraScreen();
     }
 
     public Client getClient()
