@@ -191,9 +191,9 @@ RectTransform:
   - {fileID: 1077771093}
   - {fileID: 328584471}
   - {fileID: 1782759987}
+  - {fileID: 905654680}
   - {fileID: 1255611501}
   - {fileID: 2065028857}
-  - {fileID: 905654680}
   m_Father: {fileID: 232092408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -623,7 +623,7 @@ GameObject:
   - component: {fileID: 353162390}
   - component: {fileID: 353162389}
   m_Layer: 5
-  m_Name: reaction
+  m_Name: recipe card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1063,7 +1063,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 905654679}
   m_LocalRotation: {x: 6.661338e-16, y: -0, z: 1.3322676e-15, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2244,7 +2244,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 19.895037, y: -74.889786}
-  m_SizeDelta: {x: 2600, y: 1000}
+  m_SizeDelta: {x: 2600, y: 1500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1255611502
 MonoBehaviour:
