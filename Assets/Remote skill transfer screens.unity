@@ -3619,7 +3619,7 @@ MonoBehaviour:
   IPTextBox: {fileID: 270318142}
   displayCamera: {fileID: 0}
   IPDisplay: {fileID: 465781369}
-  help_page: {fileID: 0}
+  help_page: {fileID: 551221148}
 --- !u!4 &1472239269
 Transform:
   m_ObjectHideFlags: 0
