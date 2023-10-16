@@ -33,7 +33,11 @@ public class SwitchScreen : MonoBehaviour
     private bool recip = false;
     private int helpPageNum = 0;
 
-    
+    public GameObject selfVideoScreen;
+    public GameObject otherVideoScreen;
+
+    //To keep track of the current screen
+    private string currentScreen = "self";
 
     public void Start()
     {
@@ -55,6 +59,22 @@ public class SwitchScreen : MonoBehaviour
         callingSession.SetActive(true);
         overlappingElement.SetActive(true);
         changeScreen(screenSelector.teacher);
+    }
+
+    public void changeCameraScreen()
+    {
+        if (currentScreen == "self")
+        {
+            //Switch video screen being displayed
+            selfVideoScreen.SetActive(false);
+            otherVideoScreen.SetActive(true);
+            currentScreen = "other";
+        } else
+        {
+            selfVideoScreen.SetActive(true);
+            otherVideoScreen.SetActive(false);
+            currentScreen = "self";
+        }
     }
 
     //This function is to show the button cover and the IP text box

@@ -16,9 +16,10 @@ public class RunClient2 : MonoBehaviour
     private Client client;
 
     public Button hangUpButton;
-    public Button overlayButton;
+    //public Button overlayButton;
     public Button handUpButton;
     public Button thumbsUpButton;
+    public Button exitOverlayButton;
 
     public bool clientMode = false;
     private bool alert = false;
@@ -28,10 +29,13 @@ public class RunClient2 : MonoBehaviour
     public GameObject alertPopup;
     public GameObject thumbsUpPopup;
     public GameObject overlappingElement;
+    //public GameObject exitOverlayPopup;
 
     public SwitchScreen screen;
     public CameraScript cameraScript;
 
+    //Create this to keep track of if something has just been sent
+    public bool justSent = false;
 
     private void Update()
     {
@@ -43,15 +47,18 @@ public class RunClient2 : MonoBehaviour
             Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
             //Overlap button
-            Button obtn = overlayButton.GetComponent<Button>();
-            obtn.onClick.AddListener(Overlay);
+            //Button obtn = overlayButton.GetComponent<Button>();
+            //obtn.onClick.AddListener(Overlay);
             //Hand up button
             Button handbtn = handUpButton.GetComponent<Button>();
             handbtn.onClick.AddListener(ClientSendHandUp);
             //Thumbs up button
             Button thumbbtn = thumbsUpButton.GetComponent<Button>();
             thumbbtn.onClick.AddListener(ClientSendThumbsUp);
+            //Button obtn = exitOverlayButton.GetComponent<Button>();
+            //obtn.onClick.AddListener(Overlay);
             Debug.Log("Current game state: " + client.returnGameState());
+
 
             if (client.returnGameState() == "alert")
             {
@@ -70,6 +77,17 @@ public class RunClient2 : MonoBehaviour
             }
         }
 
+        //Need this so the button doesn't activate 2000 times
+        if (justSent && time < 0.1)
+        {
+            time = time + Time.deltaTime;
+        }
+        else if (justSent && time > 0.1)
+        {
+            justSent = false;
+            time = 0;
+        }
+
         //Alert function
         if (alert)
         {
@@ -86,6 +104,7 @@ public class RunClient2 : MonoBehaviour
             time = 0;
             overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
             time = 0;
+            //Alert popup is finished, now call overlay
         }
 
         if (thumbsUp)
@@ -109,7 +128,11 @@ public class RunClient2 : MonoBehaviour
     //TODO
     public void Overlay()
     {
-        print("its overlaying time");
+        if (!justSent)
+        {
+            print("its overlaying time");
+        }
+        justSent = true;
     }
 
     
@@ -166,13 +189,21 @@ public class RunClient2 : MonoBehaviour
 
     public void ClientSendHandUp()
     {
-        client.SendMessage("hand");
+        if (!justSent)
+        {
+            client.SendMessage("hand");
+        }
+        justSent = true;
     }
 
     //Sending a thumbs up
     public void ClientSendThumbsUp()
     {
-        client.SendMessage("thumbs");
+        if (!justSent)
+        {
+            client.SendMessage("thumbs");
+        }
+        justSent = true;
     }
 
     //Call the CloseConnection method for the Client

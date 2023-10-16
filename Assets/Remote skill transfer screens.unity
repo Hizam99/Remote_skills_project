@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -922,6 +922,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 333126215}
+  - {fileID: 371815512}
   - {fileID: 1381877915}
   - {fileID: 56316375}
   - {fileID: 61549129}
@@ -1214,7 +1215,7 @@ GameObject:
   - component: {fileID: 333126214}
   - component: {fileID: 333126213}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: SelfVideo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1274,6 +1275,78 @@ RectTransform:
   m_AnchoredPosition: {x: 19.89504, y: -74.88979}
   m_SizeDelta: {x: 2500, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &371815511
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 371815512}
+  - component: {fileID: 371815514}
+  - component: {fileID: 371815513}
+  m_Layer: 5
+  m_Name: OtherVideo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &371815512
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371815511}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 232092408}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -75}
+  m_SizeDelta: {x: 2500, y: 1000}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &371815513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371815511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &371815514
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371815511}
+  m_CullTransparentMesh: 1
 --- !u!1 &375751680
 GameObject:
   m_ObjectHideFlags: 0
@@ -2725,6 +2798,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1472239268}
+        m_TargetAssemblyTypeName: SwitchScreen, Assembly-CSharp
+        m_MethodName: changeCameraScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1077771092
 GameObject:
   m_ObjectHideFlags: 0
@@ -3617,9 +3702,11 @@ MonoBehaviour:
   overlappingElement: {fileID: 61549128}
   buttonCover: {fileID: 1884504885}
   IPTextBox: {fileID: 270318142}
-  displayCamera: {fileID: 0}
+  displayCamera: {fileID: 333126212}
   IPDisplay: {fileID: 465781369}
-  help_page: {fileID: 0}
+  help_page: {fileID: 551221148}
+  selfVideoScreen: {fileID: 333126212}
+  otherVideoScreen: {fileID: 371815511}
 --- !u!4 &1472239269
 Transform:
   m_ObjectHideFlags: 0
@@ -3656,7 +3743,7 @@ MonoBehaviour:
   thumbsUpPopup: {fileID: 422661189}
   overlappingElement: {fileID: 61549128}
   screen: {fileID: 1472239268}
-  cameraScript: {fileID: 0}
+  cameraScript: {fileID: 1472239272}
 --- !u!114 &1472239271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3675,7 +3762,7 @@ MonoBehaviour:
   alertButton: {fileID: 1794193144}
   serverMode: 0
   screen: {fileID: 1472239268}
-  cameraScript: {fileID: 0}
+  cameraScript: {fileID: 1472239272}
   thumbsUpPopup: {fileID: 422661189}
   overlappingElement: {fileID: 61549128}
   clientJoined: 0
