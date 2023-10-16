@@ -8,6 +8,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.Device;
+using UnityEngine.UI;
 
 public enum screenSelector
 {
@@ -35,9 +36,11 @@ public class SwitchScreen : MonoBehaviour
 
     public GameObject selfVideoScreen;
     public GameObject otherVideoScreen;
+    public RawImage selfVideoScreenImage;
+    public RawImage otherVideoScreenImage;
 
     //To keep track of the current screen
-    private string currentScreen = "self";
+    public string currentScreen = "self";
 
     public void Start()
     {
@@ -75,6 +78,20 @@ public class SwitchScreen : MonoBehaviour
             otherVideoScreen.SetActive(false);
             currentScreen = "self";
         }
+    }
+
+    public void OverlayMode()
+    {
+        currentScreen = "overlay";
+        selfVideoScreen.SetActive(true);
+        otherVideoScreen.SetActive(true);
+        float alpha = 0.5f; //1 is opaque, 0 is transparent
+        Color currColor = selfVideoScreenImage.color;
+        currColor.a = alpha;
+        selfVideoScreenImage.color = currColor;
+        Color otherCurrColor = otherVideoScreenImage.color;
+        otherCurrColor.a = alpha;
+        otherVideoScreenImage.color = otherCurrColor;
     }
 
     //This function is to show the button cover and the IP text box

@@ -845,7 +845,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &232092405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2256,7 +2256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &910676051
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3322,7 +3322,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1251880166}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1251880163}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1251880166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3707,6 +3719,9 @@ MonoBehaviour:
   help_page: {fileID: 551221148}
   selfVideoScreen: {fileID: 333126212}
   otherVideoScreen: {fileID: 371815511}
+  selfVideoScreenImage: {fileID: 333126213}
+  otherVideoScreenImage: {fileID: 371815513}
+  currentScreen: self
 --- !u!4 &1472239269
 Transform:
   m_ObjectHideFlags: 0
@@ -3735,15 +3750,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hangUpButton: {fileID: 905654683}
-  overlayButton: {fileID: 1059423976}
   handUpButton: {fileID: 979848032}
   thumbsUpButton: {fileID: 1077771094}
+  exitOverlayButton: {fileID: 0}
   clientMode: 0
   alertPopup: {fileID: 979848028}
   thumbsUpPopup: {fileID: 422661189}
   overlappingElement: {fileID: 61549128}
   screen: {fileID: 1472239268}
   cameraScript: {fileID: 1472239272}
+  justSent: 0
 --- !u!114 &1472239271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3760,11 +3776,13 @@ MonoBehaviour:
   hangUpButton: {fileID: 905654683}
   thumbsUpButton: {fileID: 1077771094}
   alertButton: {fileID: 1794193144}
+  exitOverlayButton: {fileID: 1251880165}
   serverMode: 0
   screen: {fileID: 1472239268}
   cameraScript: {fileID: 1472239272}
   thumbsUpPopup: {fileID: 422661189}
   overlappingElement: {fileID: 61549128}
+  exitOverlayPopup: {fileID: 1251880163}
   clientJoined: 0
   thumbsUp: 0
   alert: 0
@@ -4348,7 +4366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.09019608, g: 0.054901965, b: 0.31764707, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

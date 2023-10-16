@@ -46,9 +46,6 @@ public class RunClient2 : MonoBehaviour
             //Hang up button
             Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
-            //Overlap button
-            //Button obtn = overlayButton.GetComponent<Button>();
-            //obtn.onClick.AddListener(Overlay);
             //Hand up button
             Button handbtn = handUpButton.GetComponent<Button>();
             handbtn.onClick.AddListener(ClientSendHandUp);
@@ -74,6 +71,20 @@ public class RunClient2 : MonoBehaviour
                 screen.changeScreen(screenSelector.login);
                 screen.endCall();
                 client.changeGameState();
+            } else if (client.returnGameState() == "exit")
+            {
+                //Receives an exit when the overlay is finished, renable buttons and change the screen
+                enableButtons();
+                screen.changeCameraScreen();
+                client.changeGameState();
+            }
+
+            if (screen.currentScreen == "overlay")
+            {
+                disableButtons();
+            } else
+            {
+                enableButtons();
             }
         }
 
@@ -105,6 +116,8 @@ public class RunClient2 : MonoBehaviour
             overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
             time = 0;
             //Alert popup is finished, now call overlay
+            screen.OverlayMode();
+            disableButtons();
         }
 
         if (thumbsUp)
@@ -124,23 +137,23 @@ public class RunClient2 : MonoBehaviour
         }
 
     }
-    //Function for the Overlay
-    //TODO
-    public void Overlay()
+
+    public void disableButtons()
     {
-        if (!justSent)
-        {
-            print("its overlaying time");
-        }
-        justSent = true;
+        thumbsUpButton.enabled = false;
+        handUpButton.enabled = false;
     }
 
+    public void enableButtons()
+    {
+        handUpButton.enabled = true;
+        thumbsUpButton.enabled = true;
+    }
     
     //Alert popup, activated after receiving alert from teacher
     public void AlertPopup()
     {
         alert = true;
-        
     }
 
     public void ThumbsUpPopup()
@@ -152,8 +165,12 @@ public class RunClient2 : MonoBehaviour
     //Function closes connection after hang up button is clicked
     public void HangUpButtonClicked()
     {
-        client.CloseConnection();
-        print("Connection closed");
+        if (!justSent)
+        {
+            client.CloseConnection();
+            print("Connection closed");
+        }
+        justSent = true;
     }
 
     //Function to read the IP input

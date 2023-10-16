@@ -16,6 +16,7 @@ public class RunServer : MonoBehaviour
     public Button hangUpButton;
     public Button thumbsUpButton;
     public Button alertButton;
+    public Button exitOverlayButton;
     public Server server;
 
     public bool serverMode = false;
@@ -24,6 +25,7 @@ public class RunServer : MonoBehaviour
 
     public GameObject thumbsUpPopup;
     public GameObject overlappingElement;
+    public GameObject exitOverlayPopup;
 
     private float time = 0;
 
@@ -46,6 +48,8 @@ public class RunServer : MonoBehaviour
             tuBtn.onClick.AddListener(ServerSendsThumbs);
             Button aBtn = alertButton.GetComponent<Button>();
             aBtn.onClick.AddListener(ServerSendsAlert);
+            Button obtn = exitOverlayButton.GetComponent<Button>();
+            obtn.onClick.AddListener(ServerSendsExitOverlay);
 
             //Display the IP address if the server is waiting and client hasn't joined
             if (server.getGameState() == "waiting" && !clientJoined)
@@ -179,9 +183,13 @@ public class RunServer : MonoBehaviour
 
     public void HangUpButtonClicked()
     {
-        server.CloseConnection();
-        serverMode = false;
-        clientJoined = false;
+        if (!justSent)
+        {
+            server.CloseConnection();
+            serverMode = false;
+            clientJoined = false;
+        }
+        justSent = true;
     }
 
     public void ServerSendsAlert()
@@ -192,6 +200,7 @@ public class RunServer : MonoBehaviour
             Debug.Log("Function activated");
         }
         justSent = true;
+        exitOverlayPopup.SetActive(true);
     }
 
     public void ServerSendsThumbs()
@@ -201,6 +210,15 @@ public class RunServer : MonoBehaviour
             server.SendMessage("thumbs");
         }
         justSent= true;
+    }
+
+    public void ServerSendsExitOverlay()
+    {
+        if (!justSent)
+        {
+            server.SendMessage("exit");
+        }
+        justSent = true;
     }
 
 }
