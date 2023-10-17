@@ -31,6 +31,8 @@ public class SwitchScreen : MonoBehaviour
     public GameObject help_page;
     private GameObject current;
 
+    //To keep track of the current instruction page that the user is at, this is used to return to
+    //the last page user accessed before closing the popup
     private bool recip = false;
     private int helpPageNum = 0;
 
@@ -42,6 +44,9 @@ public class SwitchScreen : MonoBehaviour
     //To keep track of the current screen
     public string currentScreen = "self";
 
+
+    //Intializes the app by deactivating all UI elements in the program and only showing the login screen
+    //this is to prevent unnecessary UI elements from activating and displaying at the wrong time
     public void Start()
     {
         callingSession.SetActive(false);
@@ -57,6 +62,8 @@ public class SwitchScreen : MonoBehaviour
         displayCamera.SetActive(true);
     }
 
+    //This is the function to activate all the relevant UI elements inside the teacher screen, this includes
+    //the header and buttons that the teacher can use
     public void teacherMode()
     {
         callingSession.SetActive(true);
@@ -108,6 +115,9 @@ public class SwitchScreen : MonoBehaviour
         IPTextBox.SetActive(true);
     }
 
+    //This function changes the current screen to the selected screen with the respective UI elements
+    // change Screen function is activated by pressing either the end call, student of teacher button
+    // where the previously active screen would be deactivated and the new screen becomes activated
     public void changeScreen(screenSelector screen)
     {
         current.SetActive(false);
@@ -128,6 +138,8 @@ public class SwitchScreen : MonoBehaviour
         current.SetActive(true);
     }
 
+    //This is the function to activate all the relevant UI elements inside the student screen, this includes
+    //the header and buttons that the student can use
     public void studentMode()
     {
         callingSession.SetActive(true);
@@ -135,6 +147,11 @@ public class SwitchScreen : MonoBehaviour
         changeScreen(screenSelector.student);
     }
 
+
+    //This is the visual side of the endCall function where the UI elements of the current calling session
+    //screen is deactivated and the user is brought back to the login screen. This function only
+    //handles the visual side of end call, the function side of the endCall (i.e. disconnect from server, etc)
+    //is being handled at server and client script
     public void endCall()
     {
         callingSession.SetActive(false);
@@ -143,6 +160,7 @@ public class SwitchScreen : MonoBehaviour
         displayCamera.SetActive(false);
     }
 
+    //Function to activate and deactivate the recipe popup whenever the recipe button is pressed
     public void recipe()
     {
         if (recip == false)
@@ -156,6 +174,9 @@ public class SwitchScreen : MonoBehaviour
         overlappingElement.transform.GetChild(5).gameObject.SetActive(recip);
     }
 
+    //Function to react to the actions related to the instruction page, there are 4 actions in total,
+    //opening and closing the page is set to activate and deactivate related UI elements whenever it is called,
+    //flip right and left displays the next and previous page inside the manual
     public void instructionPage(string action)
     {
         switch (action)
