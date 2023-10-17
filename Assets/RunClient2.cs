@@ -16,9 +16,10 @@ public class RunClient2 : MonoBehaviour
     private Client client;
 
     public Button hangUpButton;
-    public Button overlayButton;
+    //public Button overlayButton;
     public Button handUpButton;
     public Button thumbsUpButton;
+    public Button exitOverlayButton;
 
     public bool clientMode = false;
     private bool alert = false;
@@ -28,10 +29,13 @@ public class RunClient2 : MonoBehaviour
     public GameObject alertPopup;
     public GameObject thumbsUpPopup;
     public GameObject overlappingElement;
+    //public GameObject exitOverlayPopup;
 
     public SwitchScreen screen;
     public CameraScript cameraScript;
 
+    //Create this to keep track of if something has just been sent
+    public bool justSent = false;
 
     private void Update()
     {
@@ -42,16 +46,16 @@ public class RunClient2 : MonoBehaviour
             //Hang up button
             Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
-            //Overlap button
-            Button obtn = overlayButton.GetComponent<Button>();
-            obtn.onClick.AddListener(Overlay);
             //Hand up button
             Button handbtn = handUpButton.GetComponent<Button>();
             handbtn.onClick.AddListener(ClientSendHandUp);
             //Thumbs up button
             Button thumbbtn = thumbsUpButton.GetComponent<Button>();
             thumbbtn.onClick.AddListener(ClientSendThumbsUp);
+            //Button obtn = exitOverlayButton.GetComponent<Button>();
+            //obtn.onClick.AddListener(Overlay);
             Debug.Log("Current game state: " + client.returnGameState());
+
 
             if (client.returnGameState() == "alert")
             {
@@ -67,7 +71,32 @@ public class RunClient2 : MonoBehaviour
                 screen.changeScreen(screenSelector.login);
                 screen.endCall();
                 client.changeGameState();
+            } else if (client.returnGameState() == "exit")
+            {
+                //Receives an exit when the overlay is finished, renable buttons and change the screen
+                enableButtons();
+                screen.changeCameraScreen();
+                client.changeGameState();
             }
+
+            if (screen.currentScreen == "overlay")
+            {
+                disableButtons();
+            } else
+            {
+                enableButtons();
+            }
+        }
+
+        //Need this so the button doesn't activate 2000 times
+        if (justSent && time < 0.1)
+        {
+            time = time + Time.deltaTime;
+        }
+        else if (justSent && time > 0.1)
+        {
+            justSent = false;
+            time = 0;
         }
 
         //Alert function
@@ -86,6 +115,9 @@ public class RunClient2 : MonoBehaviour
             time = 0;
             overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
             time = 0;
+            //Alert popup is finished, now call overlay
+            screen.OverlayMode();
+            disableButtons();
         }
 
         if (thumbsUp)
@@ -105,19 +137,23 @@ public class RunClient2 : MonoBehaviour
         }
 
     }
-    //Function for the Overlay
-    //TODO
-    public void Overlay()
+
+    public void disableButtons()
     {
-        print("its overlaying time");
+        thumbsUpButton.enabled = false;
+        handUpButton.enabled = false;
     }
 
+    public void enableButtons()
+    {
+        handUpButton.enabled = true;
+        thumbsUpButton.enabled = true;
+    }
     
     //Alert popup, activated after receiving alert from teacher
     public void AlertPopup()
     {
         alert = true;
-        
     }
 
     public void ThumbsUpPopup()
@@ -129,8 +165,12 @@ public class RunClient2 : MonoBehaviour
     //Function closes connection after hang up button is clicked
     public void HangUpButtonClicked()
     {
-        client.CloseConnection();
-        print("Connection closed");
+        if (!justSent)
+        {
+            client.CloseConnection();
+            print("Connection closed");
+        }
+        justSent = true;
     }
 
     //Function to read the IP input
@@ -166,13 +206,21 @@ public class RunClient2 : MonoBehaviour
 
     public void ClientSendHandUp()
     {
-        client.SendMessage("hand");
+        if (!justSent)
+        {
+            client.SendMessage("hand");
+        }
+        justSent = true;
     }
 
     //Sending a thumbs up
     public void ClientSendThumbsUp()
     {
-        client.SendMessage("thumbs");
+        if (!justSent)
+        {
+            client.SendMessage("thumbs");
+        }
+        justSent = true;
     }
 
     //Call the CloseConnection method for the Client
