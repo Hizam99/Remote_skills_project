@@ -3026,7 +3026,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1472239268}
         m_TargetAssemblyTypeName: SwitchScreen, Assembly-CSharp
-        m_MethodName: hideButtons
+        m_MethodName: studentMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3035,18 +3035,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 270318142}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1102786662
 MonoBehaviour:
@@ -3753,6 +3741,7 @@ MonoBehaviour:
   handUpButton: {fileID: 979848032}
   thumbsUpButton: {fileID: 1077771094}
   exitOverlayButton: {fileID: 0}
+  studentButton: {fileID: 1102786661}
   clientMode: 0
   alertPopup: {fileID: 979848028}
   thumbsUpPopup: {fileID: 422661189}
@@ -3760,6 +3749,9 @@ MonoBehaviour:
   screen: {fileID: 1472239268}
   cameraScript: {fileID: 1472239272}
   justSent: 0
+  displayOtherVideo: {fileID: 371815513}
+  enableLog: 0
+  IP: 192.168.56.1
 --- !u!114 &1472239271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3788,6 +3780,8 @@ MonoBehaviour:
   alert: 0
   cameraBeingDisplayed: 0
   justSent: 0
+  displayOtherVideo: {fileID: 333126213}
+  enableLog: 0
 --- !u!114 &1472239272
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net;
 using UnityEngine;
@@ -8,7 +6,11 @@ using TMPro;
 using System.Threading;
 using System.Text;
 using UnityEngine.UI;
-using UnityEditor.PackageManager;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+
 
 public class RunServer : MonoBehaviour
 {
@@ -36,8 +38,34 @@ public class RunServer : MonoBehaviour
 
     //Create this to keep track of if something has just been sent
     public bool justSent = false;
+
+
+    //New objects
+
+    WebCamTexture webCam;
+    public RawImage displayOtherVideo;
+    public bool enableLog = false;
+    public TcpClient videoClient;
+
+    Texture2D currentTexture;
+
+    private TcpListener listner;
+    private const int port = 8010;
+    private bool stop = false;
+
+    const int SEND_RECEIVE_COUNT = 15;
+
+    private void Start()
+    {
+        //this could mess some stuff up?
+        Application.runInBackground = true;
+
+        //Start WebCam coroutine
+        StartCoroutine(initAndWaitForWebCamTexture());
+    }
     private void Update()
     {
+        displayOtherVideo.texture = webCam;
         Debug.Log(justSent);
         //Make sure it's in server mode before connecting functionality to buttons
         if (serverMode)
@@ -57,6 +85,7 @@ public class RunServer : MonoBehaviour
                 Debug.Log("displaying IP, waiting");
                 IPDisplay.enabled = true;
                 displayIP();
+                //Send
             } else
             {
                 IPDisplay.enabled = false;
@@ -132,7 +161,6 @@ public class RunServer : MonoBehaviour
             overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
             time = 0;
         }
-
     }
 
     public void displayCamera()
@@ -188,6 +216,17 @@ public class RunServer : MonoBehaviour
             server.CloseConnection();
             serverMode = false;
             clientJoined = false;
+
+            if (webCam != null && webCam.isPlaying)
+            {
+                webCam.Stop();
+                stop = true;
+            }
+
+            if (listner != null)
+            {
+                listner.Stop();
+            }
         }
         justSent = true;
     }
@@ -209,8 +248,9 @@ public class RunServer : MonoBehaviour
         {
             server.SendMessage("thumbs");
         }
-        justSent= true;
+        justSent = true;
     }
+
 
     public void ServerSendsExitOverlay()
     {
@@ -219,6 +259,132 @@ public class RunServer : MonoBehaviour
             server.SendMessage("exit");
         }
         justSent = true;
+    }
+
+    //Converts the data size to byte array and put result to the fullBytes array
+    void byteLengthToFrameByteArray(int byteLength, byte[] fullBytes)
+    {
+        //Clear old data
+        Array.Clear(fullBytes, 0, fullBytes.Length);
+        //Convert int to bytes
+        byte[] bytesToSendCount = BitConverter.GetBytes(byteLength);
+        //Copy result to fullBytes
+        bytesToSendCount.CopyTo(fullBytes, 0);
+    }
+
+    //Converts the byte array to the data size and returns the result
+    int frameByteArrayToByteLength(byte[] frameBytesLength)
+    {
+        int byteLength = BitConverter.ToInt32(frameBytesLength, 0);
+        return byteLength;
+    }
+
+    IEnumerator initAndWaitForWebCamTexture()
+    {
+        // Open the Camera on the desired device, in my case IPAD pro
+        webCam = new WebCamTexture();
+        // Get all devices , front and back camera
+        webCam.deviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
+
+        // request the lowest width and heigh possible
+        webCam.requestedHeight = 10;
+        webCam.requestedWidth = 10;
+
+        displayOtherVideo.texture = webCam;
+
+        webCam.Play();
+
+        currentTexture = new Texture2D(webCam.width, webCam.height);
+
+        // Connect to the server
+        listner = new TcpListener(IPAddress.Any, port);
+
+        listner.Start();
+
+        while (webCam.width < 100)
+        {
+            yield return null;
+        }
+
+        //Start sending coroutine
+        StartCoroutine(senderCOR());
+    }
+
+    WaitForEndOfFrame endOfFrame = new WaitForEndOfFrame();
+    IEnumerator senderCOR()
+    {
+
+        bool isConnected = false;
+        TcpClient videoClient = null;
+        NetworkStream stream = null;
+
+        // Wait for client to connect in another Thread 
+        Loom.RunAsync(() =>
+        {
+            while (!stop)
+            {
+                // Wait for client connection
+                videoClient = listner.AcceptTcpClient();
+                // We are connected
+
+                isConnected = true;
+                stream = videoClient.GetStream();
+            }
+        });
+
+        //Wait until client has connected
+        while (!isConnected)
+        {
+            yield return null;
+        }
+
+        LOG("Connected!");
+
+        bool readyToGetFrame = true;
+
+        byte[] frameBytesLength = new byte[SEND_RECEIVE_COUNT];
+
+        while (!stop)
+        {
+            //Wait for End of frame
+            yield return endOfFrame;
+
+            currentTexture.SetPixels(webCam.GetPixels());
+            byte[] pngBytes = currentTexture.EncodeToPNG();
+            //Fill total byte length to send. Result is stored in frameBytesLength
+            byteLengthToFrameByteArray(pngBytes.Length, frameBytesLength);
+
+            //Set readyToGetFrame false
+            readyToGetFrame = false;
+
+            Loom.RunAsync(() =>
+            {
+                //Send total byte count first
+                stream.Write(frameBytesLength, 0, frameBytesLength.Length);
+                LOG("Sent Image byte Length: " + frameBytesLength.Length);
+
+                //Send the image bytes
+                stream.Write(pngBytes, 0, pngBytes.Length);
+                LOG("Sending Image byte array data : " + pngBytes.Length);
+
+                //Sent. Set readyToGetFrame true
+                readyToGetFrame = true;
+            });
+
+            //Wait until we are ready to get new frame(Until we are done sending data)
+            while (!readyToGetFrame)
+            {
+                LOG("Waiting To get new frame");
+                yield return null;
+            }
+        }
+    }
+
+
+    void LOG(string messsage)
+    {
+        if (enableLog)
+            Debug.Log(messsage);
     }
 
 }
@@ -288,7 +454,7 @@ public class Server
         stream.Write(data, 0, data.Length);
     }
 
-    public void CloseConnection()
+        public void CloseConnection()
     {
         if (client != null)
         {
@@ -304,4 +470,152 @@ public class Server
         }
         Debug.Log("Server stopped");
     }
-} 
+}
+
+public class Loom : MonoBehaviour
+{
+    public static int maxThreads = 8;
+    static int numThreads;
+
+    private static Loom _current;
+    private int _count;
+    public static Loom Current
+    {
+        get
+        {
+            Initialize();
+            return _current;
+        }
+    }
+
+    void Awake()
+    {
+        _current = this;
+        initialized = true;
+    }
+
+    static bool initialized;
+
+    static void Initialize()
+    {
+        if (!initialized)
+        {
+
+            if (!Application.isPlaying)
+                return;
+            initialized = true;
+            var g = new GameObject("Loom");
+            _current = g.AddComponent<Loom>();
+        }
+
+    }
+
+    private List<Action> _actions = new List<Action>();
+    public struct DelayedQueueItem
+    {
+        public float time;
+        public Action action;
+    }
+    private List<DelayedQueueItem> _delayed = new List<DelayedQueueItem>();
+
+    List<DelayedQueueItem> _currentDelayed = new List<DelayedQueueItem>();
+
+    public static void QueueOnMainThread(Action action)
+    {
+        QueueOnMainThread(action, 0f);
+    }
+    public static void QueueOnMainThread(Action action, float time)
+    {
+        if (time != 0)
+        {
+            lock (Current._delayed)
+            {
+                Current._delayed.Add(new DelayedQueueItem { time = Time.time + time, action = action });
+            }
+        }
+        else
+        {
+            lock (Current._actions)
+            {
+                Current._actions.Add(action);
+            }
+        }
+    }
+
+    public static Thread RunAsync(Action a)
+    {
+        Initialize();
+        while (numThreads >= maxThreads)
+        {
+            Thread.Sleep(1);
+        }
+        Interlocked.Increment(ref numThreads);
+        ThreadPool.QueueUserWorkItem(RunAction, a);
+        return null;
+    }
+
+    private static void RunAction(object action)
+    {
+        try
+        {
+            ((Action)action)();
+        }
+        catch
+        {
+        }
+        finally
+        {
+            Interlocked.Decrement(ref numThreads);
+        }
+
+    }
+
+
+    void OnDisable()
+    {
+        if (_current == this)
+        {
+
+            _current = null;
+        }
+    }
+
+
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    List<Action> _currentActions = new List<Action>();
+
+    // Update is called once per frame
+    void Update()
+    {
+        lock (_actions)
+        {
+            _currentActions.Clear();
+            _currentActions.AddRange(_actions);
+            _actions.Clear();
+        }
+        foreach (var a in _currentActions)
+        {
+            a();
+        }
+        lock (_delayed)
+        {
+            _currentDelayed.Clear();
+            _currentDelayed.AddRange(_delayed.Where(d => d.time <= Time.time));
+            foreach (var item in _currentDelayed)
+                _delayed.Remove(item);
+        }
+        foreach (var delayed in _currentDelayed)
+        {
+            delayed.action();
+        }
+
+
+
+    }
+}
