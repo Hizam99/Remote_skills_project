@@ -70,6 +70,7 @@ public class RunClient2 : MonoBehaviour
         {
 
             //Hang up button
+            /*
             Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
             //Hand up button
@@ -115,10 +116,11 @@ public class RunClient2 : MonoBehaviour
             } else
             {
                 enableButtons();
-            }
+            }*/
         }
 
         //Need this so the button doesn't activate 2000 times
+        /*
         if (justSent && time < 0.1)
         {
             time = time + Time.deltaTime;
@@ -164,7 +166,7 @@ public class RunClient2 : MonoBehaviour
             time = 0;
             thumbsUpPopup.SetActive(false);
             time = 0;
-        }
+        }*/
 
     }
 
@@ -227,6 +229,7 @@ public class RunClient2 : MonoBehaviour
         }
         //Create new client instance
         client = new Client(ip);
+        /*
         Debug.Log("Client has started");
         cameraScript.StartStopCam_Clicked();
         screen.showCameraScreen();
@@ -245,7 +248,7 @@ public class RunClient2 : MonoBehaviour
             LOGWARNING("Connected!");
 
             imageReceiver();
-        });
+        });*/
     }
 
     public Client getClient()
@@ -285,7 +288,7 @@ public class RunClient2 : MonoBehaviour
     }
 
 
-
+    /*
     void imageReceiver()
     {
         //While loop in another Thread is fine so we don't block main Unity Thread
@@ -315,6 +318,7 @@ public class RunClient2 : MonoBehaviour
         bytesToSendCount.CopyTo(fullBytes, 0);
     }
 
+    
     //Converts the byte array to the data size and returns the result
     int frameByteArrayToByteLength(byte[] frameBytesLength)
     {
@@ -415,7 +419,7 @@ public class RunClient2 : MonoBehaviour
     {
         if (enableLog)
             Debug.LogWarning(messsage);
-    }
+    }*/
 
 }
 

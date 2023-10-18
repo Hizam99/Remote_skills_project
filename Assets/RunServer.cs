@@ -88,7 +88,9 @@ public class RunServer : MonoBehaviour
                 //Send
             } else
             {
-                IPDisplay.enabled = false;
+                IPDisplay.text = "client managed to join";
+                //TODO CHANGE THIS BACK
+                //IPDisplay.enabled = false;
             }
             if (server.getGameState() != "waiting")
             {
