@@ -16,7 +16,14 @@ The Remote Skills app offers a unique simulation experience, allowing trainers t
 
    
 # Building the Project
+Build on mobile devices:
 Simply install the provided Zip file, open Unity, and load the file. Connect your iOS device, build and run the project, and it will automatically launch on your phone, making the setup process quick and hassle-free. For the two devices to communicate to each other on a local network, make sure to change your router's settings to allow communication between the devices by opening port 11113 and port 8010. This can be done by logging on to your router by entering its IP address into a web server and changing your opening ports from there.
+
+Build in Unity:
+1)    Download two copies of the project on your laptop to imitate the student and teacher interaction (i.e. one student on their device and the teacher on the other).
+2)    Open both of the project in Unity.
+3)    Press the play button to instigate the simulation and begin using.
+Note: A camera connected to a laptop or use of a remote camera is required due to code requirements, as the live stream was partially implemented and utilises the feature.
 
 # Application Interface 
 ![IMG_8821](https://github.com/Hizam99/Remote_skills_project/assets/134905086/908c5a88-bce9-4ebd-94fb-d083092d99f7)
