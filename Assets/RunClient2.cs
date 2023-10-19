@@ -37,13 +37,15 @@ public class RunClient2 : MonoBehaviour
     //Create this to keep track of if something has just been sent
     public bool justSent = false;
 
+    
+
     private void Update()
     {
         //If the client has started
         if (clientMode)
         {
-
-            //Hang up button
+            //Button obtn = exitOverlayButton.GetComponent<Button>();
+            //obtn.onClick.AddListener(Overlay);
             Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
             //Hand up button
@@ -52,11 +54,7 @@ public class RunClient2 : MonoBehaviour
             //Thumbs up button
             Button thumbbtn = thumbsUpButton.GetComponent<Button>();
             thumbbtn.onClick.AddListener(ClientSendThumbsUp);
-            //Button obtn = exitOverlayButton.GetComponent<Button>();
-            //obtn.onClick.AddListener(Overlay);
-            Debug.Log("Current game state: " + client.returnGameState());
-
-
+            
             if (client.returnGameState() == "alert")
             {
                 //Call alertPopup then reset the game state
@@ -75,7 +73,7 @@ public class RunClient2 : MonoBehaviour
             {
                 //Receives an exit when the overlay is finished, renable buttons and change the screen
                 enableButtons();
-                screen.changeCameraScreen();
+                screen.exitOverlay();
                 client.changeGameState();
             }
 
