@@ -127,7 +127,7 @@ public class SwitchScreen : MonoBehaviour
         currColor.a  = alpha;
         teacher.GetComponent<RawImage>().color = currColor;
 
-        teacherScreen.transform.GetChild(2).gameObject.SetActive(true);
+        
 
         /* Color otherCurrColor = otherVideoScreenImage.color;
         otherCurrColor.a = alpha;

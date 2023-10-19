@@ -25,11 +25,11 @@ public class CameraScript : MonoBehaviour
             // stop the webcam;
             //start the webcam;
 
-            if (tex != null)
+            /* if (tex != null)
             {
                 StopWebcam();
                 StartStopCam_Clicked();
-            }
+            } */
         }
 
     }

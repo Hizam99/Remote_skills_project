@@ -37,17 +37,7 @@ public class RunClient2 : MonoBehaviour
     //Create this to keep track of if something has just been sent
     public bool justSent = false;
 
-    private void Start() {
-        //Hang up button
-            Button hubtn = hangUpButton.GetComponent<Button>();
-            hubtn.onClick.AddListener(HangUpButtonClicked);
-            //Hand up button
-            Button handbtn = handUpButton.GetComponent<Button>();
-            handbtn.onClick.AddListener(ClientSendHandUp);
-            //Thumbs up button
-            Button thumbbtn = thumbsUpButton.GetComponent<Button>();
-            thumbbtn.onClick.AddListener(ClientSendThumbsUp);
-    }
+    
 
     private void Update()
     {
@@ -56,9 +46,15 @@ public class RunClient2 : MonoBehaviour
         {
             //Button obtn = exitOverlayButton.GetComponent<Button>();
             //obtn.onClick.AddListener(Overlay);
-            Debug.Log("Current game state: " + client.returnGameState());
-
-
+            Button hubtn = hangUpButton.GetComponent<Button>();
+            hubtn.onClick.AddListener(HangUpButtonClicked);
+            //Hand up button
+            Button handbtn = handUpButton.GetComponent<Button>();
+            handbtn.onClick.AddListener(ClientSendHandUp);
+            //Thumbs up button
+            Button thumbbtn = thumbsUpButton.GetComponent<Button>();
+            thumbbtn.onClick.AddListener(ClientSendThumbsUp);
+            
             if (client.returnGameState() == "alert")
             {
                 //Call alertPopup then reset the game state
@@ -77,7 +73,7 @@ public class RunClient2 : MonoBehaviour
             {
                 //Receives an exit when the overlay is finished, renable buttons and change the screen
                 enableButtons();
-                screen.changeCameraScreen();
+                screen.exitOverlay();
                 client.changeGameState();
             }
 

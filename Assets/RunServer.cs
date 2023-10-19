@@ -26,6 +26,7 @@ public class RunServer : MonoBehaviour
     public GameObject thumbsUpPopup;
     public GameObject overlappingElement;
     public GameObject exitOverlayPopup;
+    public GameObject alertPopup;
 
     private float time = 0;
 
@@ -37,8 +38,14 @@ public class RunServer : MonoBehaviour
     //Create this to keep track of if something has just been sent
     public bool justSent = false;
 
-    private void Start() {
-        Button hubtn = hangUpButton.GetComponent<Button>();
+    
+
+    private void Update()
+    {
+        //Make sure it's in server mode before connecting functionality to buttons
+        if (serverMode)
+        {
+            Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
             Button tuBtn = thumbsUpButton.GetComponent<Button>();
             tuBtn.onClick.AddListener(ServerSendsThumbs);
@@ -46,19 +53,9 @@ public class RunServer : MonoBehaviour
             aBtn.onClick.AddListener(ServerSendsAlert);
             Button obtn = exitOverlayButton.GetComponent<Button>();
             obtn.onClick.AddListener(ServerSendsExitOverlay);
-    }
-
-    private void Update()
-    {
-        Debug.Log(justSent);
-        //Make sure it's in server mode before connecting functionality to buttons
-        if (serverMode)
-        {
-            
             //Display the IP address if the server is waiting and client hasn't joined
             if (server.getGameState() == "waiting" && !clientJoined)
             {
-                Debug.Log("displaying IP, waiting");
                 IPDisplay.enabled = true;
                 displayIP();
             } else
@@ -67,7 +64,6 @@ public class RunServer : MonoBehaviour
             }
             if (server.getGameState() != "waiting")
             {
-                Debug.Log("hiding IP, client joined");
                 clientJoined = true;
             }
 
@@ -87,7 +83,7 @@ public class RunServer : MonoBehaviour
                 screen.changeScreen(screenSelector.login);
                 screen.endCall();
                 server.changeGameState();
-            } else if (server.getGameState() == "alert")
+            } else if (server.getGameState() == "hand")
             {
                 AlertPopup();
                 server.changeGameState();
@@ -122,7 +118,7 @@ public class RunServer : MonoBehaviour
 
         if (alert)
         {
-            overlappingElement.transform.GetChild(2).gameObject.SetActive(true);
+            alertPopup.SetActive(true);
         }
 
         if (time < 1 && alert)
@@ -133,7 +129,7 @@ public class RunServer : MonoBehaviour
         {
             alert = false;
             time = 0;
-            overlappingElement.transform.GetChild(2).gameObject.SetActive(false);
+            alertPopup.SetActive(false);
             time = 0;
         }
 
