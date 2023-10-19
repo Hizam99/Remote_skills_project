@@ -36,13 +36,9 @@ public class RunServer : MonoBehaviour
 
     //Create this to keep track of if something has just been sent
     public bool justSent = false;
-    private void Update()
-    {
-        Debug.Log(justSent);
-        //Make sure it's in server mode before connecting functionality to buttons
-        if (serverMode)
-        {
-            Button hubtn = hangUpButton.GetComponent<Button>();
+
+    private void Start() {
+        Button hubtn = hangUpButton.GetComponent<Button>();
             hubtn.onClick.AddListener(HangUpButtonClicked);
             Button tuBtn = thumbsUpButton.GetComponent<Button>();
             tuBtn.onClick.AddListener(ServerSendsThumbs);
@@ -50,7 +46,15 @@ public class RunServer : MonoBehaviour
             aBtn.onClick.AddListener(ServerSendsAlert);
             Button obtn = exitOverlayButton.GetComponent<Button>();
             obtn.onClick.AddListener(ServerSendsExitOverlay);
+    }
 
+    private void Update()
+    {
+        Debug.Log(justSent);
+        //Make sure it's in server mode before connecting functionality to buttons
+        if (serverMode)
+        {
+            
             //Display the IP address if the server is waiting and client hasn't joined
             if (server.getGameState() == "waiting" && !clientJoined)
             {

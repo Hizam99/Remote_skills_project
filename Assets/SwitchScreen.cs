@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -38,6 +38,8 @@ public class SwitchScreen : MonoBehaviour
 
     public GameObject selfVideoScreen;
     public GameObject otherVideoScreen;
+    public GameObject student;
+    public GameObject teacher;
     public RawImage selfVideoScreenImage;
     public RawImage otherVideoScreenImage;
 
@@ -73,7 +75,29 @@ public class SwitchScreen : MonoBehaviour
 
     public void changeCameraScreen()
     {
-        if (currentScreen == "self")
+        if (current == teacherScreen) {
+            if (currentScreen == "self") {
+                student.SetActive(true);
+                teacher.SetActive(false);
+                currentScreen = "other";
+            } else {
+                teacher.SetActive(true);
+                student.SetActive(false);
+                currentScreen = "self";
+            }
+        } else {
+            if (currentScreen == "self") {
+                teacher.SetActive(true);
+                student.SetActive(false);
+                currentScreen = "other";
+            } else {
+                student.SetActive(true);
+                teacher.SetActive(false);
+                currentScreen = "self";
+            }
+        }
+
+        /* if (currentScreen == "self")
         {
             //Switch video screen being displayed
             selfVideoScreen.SetActive(false);
@@ -84,22 +108,46 @@ public class SwitchScreen : MonoBehaviour
             selfVideoScreen.SetActive(true);
             otherVideoScreen.SetActive(false);
             currentScreen = "self";
-        }
+        } */
+
+
     }
 
     public void OverlayMode()
     {
         currentScreen = "overlay";
-        selfVideoScreen.SetActive(true);
-        otherVideoScreen.SetActive(true);
-        float alpha = 0.5f; //1 is opaque, 0 is transparent
-        Color currColor = selfVideoScreenImage.color;
-        currColor.a = alpha;
-        selfVideoScreenImage.color = currColor;
-        Color otherCurrColor = otherVideoScreenImage.color;
+        /* selfVideoScreen.SetActive(true);
+        otherVideoScreen.SetActive(true); */
+
+        teacher.SetActive(true);
+        student.SetActive(true);
+
+        float alpha = 0.45f; //1 is opaque, 0 is 
+        Color currColor = teacher.GetComponent<RawImage>().color;
+        currColor.a  = alpha;
+        teacher.GetComponent<RawImage>().color = currColor;
+
+        teacherScreen.transform.GetChild(2).gameObject.SetActive(true);
+
+        /* Color otherCurrColor = otherVideoScreenImage.color;
         otherCurrColor.a = alpha;
-        otherVideoScreenImage.color = otherCurrColor;
+        otherVideoScreenImage.color = otherCurrColor; */
     }
+
+    public void exitOverlay() {
+        Color currColor = teacher.GetComponent<RawImage>().color;
+        currColor.a  = 1;
+        teacher.GetComponent<RawImage>().color = currColor;
+        
+        if (current == teacherScreen) {
+            student.SetActive(false);
+        } else {
+            teacher.SetActive(false);
+        }
+        teacherScreen.transform.GetChild(2).gameObject.SetActive(false);
+        
+    }
+
 
     //This function is to show the button cover and the IP text box
     //Activated by pressing student or teacher button
@@ -121,6 +169,7 @@ public class SwitchScreen : MonoBehaviour
     public void changeScreen(screenSelector screen)
     {
         current.SetActive(false);
+        currentScreen = "self";
 
         switch (screen)
         {
@@ -129,9 +178,13 @@ public class SwitchScreen : MonoBehaviour
                 break;
             case screenSelector.student:
                 current = studentScreen;
+                student.SetActive(true);
+                teacher.SetActive(false);
                 break;
             case screenSelector.teacher:
                 current = teacherScreen;
+                teacher.SetActive(true);
+                student.SetActive(false);
                 break;
         }
 
