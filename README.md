@@ -16,7 +16,7 @@ The Remote Skills app offers a unique simulation experience, allowing trainers t
 
    
 # Building the Project
-Simply install the provided Zip file, open Unity, and load the file. Connect your iOS device, build and run the project, and it will automatically launch on your phone, making the setup process quick and hassle-free.
+Simply install the provided Zip file, open Unity, and load the file. Connect your iOS device, build and run the project, and it will automatically launch on your phone, making the setup process quick and hassle-free. For the two devices to communicate to each other on a local network, make sure to change your router's settings to allow communication between the devices by opening port 11113 and port 8010. This can be done by logging on to your router by entering its IP address into a web server and changing your opening your ports from there.
 
 # Application Interface 
 ![IMG_8821](https://github.com/Hizam99/Remote_skills_project/assets/134905086/908c5a88-bce9-4ebd-94fb-d083092d99f7)
