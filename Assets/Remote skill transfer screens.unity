@@ -3388,10 +3388,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1251880163}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1472239268}
+        m_TargetAssemblyTypeName: SwitchScreen, Assembly-CSharp
+        m_MethodName: exitOverlay
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3754,7 +3754,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1361823634
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3824,7 +3824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1381877915
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3998,6 +3998,8 @@ MonoBehaviour:
   help_page: {fileID: 551221148}
   selfVideoScreen: {fileID: 333126212}
   otherVideoScreen: {fileID: 371815511}
+  student: {fileID: 2067694803}
+  teacher: {fileID: 1361823633}
   selfVideoScreenImage: {fileID: 333126213}
   otherVideoScreenImage: {fileID: 371815513}
   currentScreen: self
@@ -4034,7 +4036,7 @@ MonoBehaviour:
   exitOverlayButton: {fileID: 0}
   clientMode: 0
   alertPopup: {fileID: 979848028}
-  thumbsUpPopup: {fileID: 422661189}
+  thumbsUpPopup: {fileID: 1655040363}
   overlappingElement: {fileID: 61549128}
   screen: {fileID: 1472239268}
   cameraScript: {fileID: 1472239272}
@@ -4059,7 +4061,7 @@ MonoBehaviour:
   serverMode: 0
   screen: {fileID: 1472239268}
   cameraScript: {fileID: 1472239272}
-  thumbsUpPopup: {fileID: 422661189}
+  thumbsUpPopup: {fileID: 1655040363}
   overlappingElement: {fileID: 61549128}
   exitOverlayPopup: {fileID: 1251880163}
   clientJoined: 0
@@ -4747,7 +4749,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1472239268}
         m_TargetAssemblyTypeName: SwitchScreen, Assembly-CSharp
-        m_MethodName: Alert
+        m_MethodName: OverlayMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4999,7 +5001,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2067694804
 RectTransform:
   m_ObjectHideFlags: 0
