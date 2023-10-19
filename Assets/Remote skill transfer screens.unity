@@ -4064,7 +4064,7 @@ MonoBehaviour:
   thumbsUpPopup: {fileID: 1655040363}
   overlappingElement: {fileID: 61549128}
   exitOverlayPopup: {fileID: 1251880163}
-  alertPopup: {fileID: 0}
+  alertPopup: {fileID: 328584470}
   clientJoined: 0
   thumbsUp: 0
   alert: 0
